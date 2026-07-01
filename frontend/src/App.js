@@ -3,7 +3,13 @@ import Form from './components/Form/Form';
 import RecommendationList from './components/RecommendationList/RecommendationList';
 
 function App() {
-  const [recommendations, setRecommendations ] = useState([])
+  const [recommendations, setRecommendations] = useState([]);
+  const [showMissingCriteriaHint, setShowMissingCriteriaHint] = useState(false);
+
+  const handleRecommendationsChange = (newRecommendations, hasSelectedCriteria) => {
+    setRecommendations(newRecommendations);
+    setShowMissingCriteriaHint(newRecommendations.length === 0 && !hasSelectedCriteria);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-brand-50 to-gray-100 px-4 py-10 sm:py-14">
@@ -20,10 +26,13 @@ function App() {
 
         <div className="grid grid-cols-1 gap-8 rounded-2xl bg-white/60 p-4 shadow-sm ring-1 ring-black/5 sm:p-8 md:grid-cols-2">
           <div>
-            <Form onRecommendationsChange={setRecommendations} />
+            <Form onRecommendationsChange={handleRecommendationsChange} />
           </div>
           <div>
-            <RecommendationList recommendations={recommendations} />
+            <RecommendationList
+              recommendations={recommendations}
+              showMissingCriteriaHint={showMissingCriteriaHint}
+            />
           </div>
         </div>
       </div>

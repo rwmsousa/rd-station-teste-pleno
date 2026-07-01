@@ -103,7 +103,7 @@ describe('Form', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Obter recomendação' }));
 
     expect(onRecommendationsChange).toHaveBeenCalledTimes(1);
-    expect(onRecommendationsChange).toHaveBeenCalledWith([]);
+    expect(onRecommendationsChange).toHaveBeenCalledWith([], false);
   });
 
   test('Substitui integralmente o resultado anterior a cada nova submissão', () => {
@@ -138,5 +138,26 @@ describe('Form', () => {
     expect(onRecommendationsChange).toHaveBeenCalledTimes(2);
     expect(onRecommendationsChange.mock.calls[0][0]).toHaveLength(1);
     expect(onRecommendationsChange.mock.calls[1][0]).toHaveLength(1);
+  });
+
+  test('Informa hasSelectedCriteria=true quando ao menos uma preferência ou funcionalidade foi selecionada', () => {
+    useProducts.mockReturnValue({
+      preferences: ['Integração com chatbots'],
+      features: [],
+      products: [],
+      isLoading: false,
+      error: null,
+    });
+
+    const onRecommendationsChange = jest.fn();
+
+    render(<Form onRecommendationsChange={onRecommendationsChange} />);
+
+    const [singleProductRadio] = screen.getAllByRole('radio');
+    fireEvent.click(singleProductRadio);
+    fireEvent.click(screen.getByLabelText('Integração com chatbots'));
+    fireEvent.click(screen.getByRole('button', { name: 'Obter recomendação' }));
+
+    expect(onRecommendationsChange).toHaveBeenCalledWith([], true);
   });
 });

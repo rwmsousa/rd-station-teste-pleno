@@ -1,6 +1,6 @@
 import React from 'react';
 
-function RecommendationList({ recommendations }) {
+function RecommendationList({ recommendations, showMissingCriteriaHint = false }) {
   return (
     <div>
       <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-gray-500">
@@ -9,7 +9,9 @@ function RecommendationList({ recommendations }) {
 
       {recommendations.length === 0 && (
         <p className="rounded-lg border border-dashed border-gray-300 px-4 py-6 text-center text-sm text-gray-500">
-          Nenhuma recomendação encontrada.
+          {showMissingCriteriaHint
+            ? 'Selecione ao menos uma preferência ou funcionalidade para receber uma recomendação.'
+            : 'Nenhuma recomendação encontrada.'}
         </p>
       )}
 

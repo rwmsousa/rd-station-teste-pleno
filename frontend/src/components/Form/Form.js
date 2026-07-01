@@ -22,8 +22,10 @@ function Form({ onRecommendationsChange }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     const dataRecommendations = getRecommendations(formData);
+    const hasSelectedCriteria =
+      formData.selectedPreferences.length > 0 || formData.selectedFeatures.length > 0;
 
-    onRecommendationsChange(dataRecommendations);
+    onRecommendationsChange(dataRecommendations, hasSelectedCriteria);
   };
 
   if (isLoading) {

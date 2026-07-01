@@ -42,4 +42,29 @@ describe('App', () => {
     expect(screen.queryByText('RD Station CRM')).not.toBeInTheDocument();
     expect(screen.getByText('RD Conversas')).toBeInTheDocument();
   });
+
+  test('Exibe aviso de critérios não selecionados quando o Form retorna lista vazia sem preferências/funcionalidades', () => {
+    Form.mockImplementation(({ onRecommendationsChange }) => (
+      <div>
+        <button onClick={() => onRecommendationsChange([], false)}>
+          Simular submissão sem critérios
+        </button>
+        <button onClick={() => onRecommendationsChange([], true)}>
+          Simular submissão com critérios sem correspondência
+        </button>
+      </div>
+    ));
+
+    render(<App />);
+
+    fireEvent.click(screen.getByText('Simular submissão sem critérios'));
+    expect(
+      screen.getByText(
+        'Selecione ao menos uma preferência ou funcionalidade para receber uma recomendação.'
+      )
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByText('Simular submissão com critérios sem correspondência'));
+    expect(screen.getByText('Nenhuma recomendação encontrada.')).toBeInTheDocument();
+  });
 });
